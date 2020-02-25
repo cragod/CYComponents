@@ -15,5 +15,4 @@ CY Quant Components
 
 
 
-
-[Github](https://github.com/cragod/CYComponents)
+.. _Github: https://github.com/cragod/CYComponents
