@@ -13,7 +13,7 @@
   
     币对处理，统一格式化
 
-  - [ ] one_token
+  - [X] one_token
 
     1token API 封装
 
@@ -43,3 +43,6 @@
 
 
 ## TODO
+
+- OneToken Configuration Description
+- OneToken depend on COLUMNs
