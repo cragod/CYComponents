@@ -5,7 +5,7 @@
 
 ## Features
 
-- [ ] utils
+- [X] utils
 
   归类的工具
 
@@ -17,11 +17,11 @@
 
     1token API 封装
 
-  - [ ] notifier
+  - [X] notifier
 
     发送收消息通知
 
-- [ ] defines
+- [X] defines
 
   常用定义
 
@@ -33,11 +33,11 @@
 
     公用枚举
 
-- [ ] helper
+- [X] helper
 
   一些公共的流程处理方法
 
-  - [ ] formatter
+  - [X] formatter
 
     格式化流程（类型转换、格式化等）
 
