@@ -1,1 +1,1 @@
-"""Unit test package for CYComponents."""
+"""Unit test package for cy_components."""

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-"""Tests for `CYComponents` package."""
+"""Tests for `cy_components` package."""
 
 import pytest
 
 
-from CYComponents import CYComponents
+from cy_components import cy_components
 
 
 @pytest.fixture
