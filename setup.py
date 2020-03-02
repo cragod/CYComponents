@@ -10,7 +10,10 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = []
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
+requirements = [] + required
 
 setup_requirements = ['pytest-runner', ]
 
@@ -19,7 +22,7 @@ test_requirements = ['pytest>=3', ]
 setup(
     author="Gatro CY",
     author_email='cragodn@gmail.com',
-    python_requires='>=3.5',
+    python_requires='>=3.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
