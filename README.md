@@ -25,11 +25,11 @@
 
   常用定义
 
-  - [ ] columns
+  - [X] columns
 
     表列名
     
-  - [ ] enums
+  - [X] enums
 
     公用枚举
 
