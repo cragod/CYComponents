@@ -1,10 +1,8 @@
-import json
 import requests
 import random
-import pandas as pd
 from .coin_pair import CoinPair
-# from ..common.enum import TimeFrame
-# from ..common.defs import COL_CANDLE_BEGIN_TIME
+from ..defines.enums import TimeFrame
+from ..defines.column_names import COL_CANDLE_BEGIN_TIME
 
 
 class OneToken:
@@ -15,7 +13,10 @@ class OneToken:
         Parameters
         ----------
         cfgs : list, optional
-            TODO, by default []
+            [{
+                'key': 'abc',
+                'secret': '123',
+            },{...}], by default []
         """
         self.configs = cfgs
 

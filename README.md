@@ -43,6 +43,3 @@
 
 
 ## TODO
-
-- OneToken Configuration Description
-- OneToken depend on COLUMNs
