@@ -31,7 +31,7 @@ class OneToken:
     def fetch_candle_data(self, exchange_name, coin_pair: CoinPair, timeframe: TimeFrame, limit=200, since=0):
         """Fetching"""
         headers = {'ot-key': random.choice(self.configs)['key']}
-        contract = '{}/{}'.format(self.exchange_name_mapping_dict[exchange_name], coin_pair.pair(sep='.').lower())
+        contract = '{}/{}'.format(self.exchange_name_mapping_dict[exchange_name], coin_pair.formatted(sep='.').lower())
         base_url = 'https://hist-quote.1tokentrade.cn/candles'
         since /= 1000  # seconds
         until = since + limit * timeframe.time_interval(res_unit='s')
