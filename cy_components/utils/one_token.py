@@ -7,7 +7,7 @@ from ..defines.column_names import COL_CANDLE_BEGIN_TIME
 
 class OneToken:
 
-    def __init__(self, cfgs=[]):
+    def __init__(self, exchange_name, cfgs=[]):
         """根据配置初始化
 
         Parameters
@@ -19,19 +19,20 @@ class OneToken:
             },{...}], by default []
         """
         self.configs = cfgs
+        self.exchange_name = exchange_name
 
     @property
-    def exchange_name_mapping_dict(self):
-        """OneToken 交易所名称映射 """
+    def inner_exchange_name(self):
+        """映射到内部请求用的exchange_name"""
         return {
             "Binance": "binance",
             "HuobiPro": "huobip",
-        }
+        }[self.exchange_name]
 
-    def fetch_candle_data(self, exchange_name, coin_pair: CoinPair, timeframe: TimeFrame, limit=200, since=0):
+    def fetch_candle_data(self, coin_pair: CoinPair, timeframe: TimeFrame, limit=200, since=0):
         """Fetching"""
         headers = {'ot-key': random.choice(self.configs)['key']}
-        contract = '{}/{}'.format(self.exchange_name_mapping_dict[exchange_name], coin_pair.formatted(sep='.').lower())
+        contract = '{}/{}'.format(self.inner_exchange_name, coin_pair.formatted(sep='.').lower())
         base_url = 'https://hist-quote.1tokentrade.cn/candles'
         since /= 1000  # seconds
         until = since + limit * timeframe.time_interval(res_unit='s')
