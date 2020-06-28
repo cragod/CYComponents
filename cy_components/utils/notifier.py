@@ -31,7 +31,7 @@ class MessageHandler:
             logger.error('Send WechatWork message failed: %s', format(repr(err)))
 
     @staticmethod
-    def __send_dingding_msg(content, token):
+    def __send_dingding_msg(title, content, token):
         """send meesage by dingding"""
         logger = logging.getLogger('MessageHandler.Dingding')
         logger.setLevel(logging.INFO)
@@ -39,7 +39,10 @@ class MessageHandler:
         try:
             msg = {
                 "msgtype": "markdown",
-                "markdown": {"title": "a", "text": content + '\n>' + datetime.now().strftime("%m-%d %H:%M:%S")}
+                "markdown": {
+                    "title": title,
+                    "text": content + '\n>' + datetime.now().strftime("%m-%d %H:%M:%S")
+                }
             }
             Headers = {"Content-Type": "application/json ;charset=utf-8 "}
             url = 'https://oapi.dingtalk.com/robot/send?access_token=' + token
@@ -49,9 +52,9 @@ class MessageHandler:
             logger.error('Send Dingding message failed: %s', format(repr(err)))
 
     @staticmethod
-    def send_message(msg, type=MessageType.DingDing, token=None):
+    def send_message(msg, title='Message', type=MessageType.DingDing, token=None):
         """Send simple message"""
         if type == MessageType.DingDing:
-            MessageHandler.__send_dingding_msg(msg, token)
+            MessageHandler.__send_dingding_msg(title, msg, token)
         elif type == MessageType.WeChatWork:
             MessageHandler.__send_wechatwork_msg(msg, token)
