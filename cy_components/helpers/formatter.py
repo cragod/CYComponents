@@ -46,6 +46,11 @@ class DateFormatter:
         date = date.replace(second=0, microsecond=0)
         return date
 
+    @staticmethod
+    def now_date_string(format="%Y-%m-%d %H:%M:%S"):
+        """当前时间字符串"""
+        return DateFormatter.convert_local_date_to_string(datetime.now(), format)
+
 
 class CandleFormatter:
     """K 线格式处理"""
@@ -59,7 +64,7 @@ class CandleFormatter:
 
         DataFrame:
             candle_begin_time    open    high     low   close     volume
-        0   2017-08-17 12:00:00  301.13  301.13  298.00 298.00   5.80167
+        0   2017-08-17 12: 00: 00  301.13  301.13  298.00 298.00   5.80167
         ...
         """
         df = pd.DataFrame(data, dtype=float)
@@ -84,9 +89,9 @@ class CandleFormatter:
     def resample(df, rule_type=RuleType.Minute_15):
         """
         Resample date
-        :param df:
-        :param rule_type:
-        :return:
+        : param df:
+        : param rule_type:
+        : return:
         """
 
         # =====转换为其他分钟数据
