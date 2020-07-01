@@ -4,9 +4,10 @@
 class CoinPair:
     """ 币对处理类 """
 
-    def __init__(self, trade_coin='', base_coin=''):
+    def __init__(self, trade_coin='', base_coin='', custom_min_cost=None):
         self.trade_coin = trade_coin.upper()
         self.base_coin = base_coin.upper()
+        self.custom_min_cost = custom_min_cost  # 自定义最小下单金额
 
     def formatted(self, sep='/'):
         """获取格式化的币对
