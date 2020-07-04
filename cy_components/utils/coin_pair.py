@@ -4,6 +4,13 @@
 class CoinPair:
     """ 币对处理类 """
 
+    @classmethod
+    def coin_pair_with(cls, cp_str, sep='/'):
+        comps = cp_str.split(sep)
+        if len(comps) < 2:
+            return None
+        return CoinPair(comps[0], comps[1])
+
     def __init__(self, trade_coin='', base_coin='', custom_min_cost=None):
         self.trade_coin = trade_coin.upper()
         self.base_coin = base_coin.upper()
