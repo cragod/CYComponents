@@ -39,3 +39,37 @@ class CoinPair:
 
         # default
         return 1
+
+
+class ContractCoinPair(CoinPair):
+    """合约币对"""
+    @classmethod
+    def coin_pair_with(cls, cp_str, sep='/'):
+        comps = cp_str.split(sep, 3)
+
+        def safe_list_get(l, idx, default=None):
+            try:
+                return l[idx]
+            except IndexError:
+                return default
+        if len(comps) < 2:
+            return None
+
+        return ContractCoinPair(comps[0], comps[1], safe_list_get(comps, 2))
+
+    def __init__(self, trade_coin='', base_coin='', tail_str='', custom_min_cost=None):
+        super().__init__(trade_coin, base_coin, custom_min_cost)
+        self.tail = tail_str
+
+    def formatted(self, sep='/'):
+        """获取格式化的币对
+
+        Parameters
+        ----------
+        sep : str, optional
+            分割符, by default '/'
+        """
+        base_str = "{}{}{}".format(self.trade_coin, sep, self.base_coin)
+        if self.tail is not None:
+            base_str = "{}{}{}".format(base_str, sep, self.tail)
+        return base_str
