@@ -1,9 +1,8 @@
-import time
 import pytz
 import pandas as pd
 import dateutil.parser
 from enum import IntEnum
-from datetime import datetime, timedelta
+from datetime import datetime
 from ..defines.column_names import *
 from ..defines.enums import RuleType
 
@@ -14,11 +13,11 @@ class DateFormatter:
     @staticmethod
     def convert_local_date_to_timestamp(date):
         """Date -> Timestamp(ms)"""
-        return int(time.mktime(date.timetuple())) * 1000
+        return int(date.timestamp()) * 1000
 
     @staticmethod
     def convert_timepstamp_to_local_date(timestamp, tz=None):
-        """Timestamp(ms) -> Date """
+        """Timestamp(ms) -> Date, tz=None 默认走本地时区"""
         date = datetime.fromtimestamp(timestamp / 1000, tz=tz)
         return date
 
@@ -71,7 +70,7 @@ class CandleFormatter:
     """K 线格式处理"""
 
     @staticmethod
-    def convert_raw_data_to_data_frame(data, hour_offset=8, date_name=COL_CANDLE_BEGIN_TIME, from_type=CandleDateFromType.Timestamps):
+    def convert_raw_data_to_data_frame(data, date_name=COL_CANDLE_BEGIN_TIME, from_type=CandleDateFromType.Timestamps):
         """
         Raw Data:
         [[1503386100000, 300.23, 300.24, 294.38, 297.76, 125.53231],
@@ -88,7 +87,6 @@ class CandleFormatter:
             df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=None))
         else:
             df[date_name] = pd.to_datetime(df['MTS'], unit='ms')
-            df[date_name] = df[date_name] + timedelta(hours=hour_offset)
         df = df[[date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
         return df
 
