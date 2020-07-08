@@ -27,9 +27,9 @@ class DateFormatter:
         return date.strftime(format)
 
     @staticmethod
-    def convert_string_to_local_date(date_string, format="%Y-%m-%d %H:%M:%S"):
+    def convert_string_to_local_date(date_string, format="%Y-%m-%d %H:%M:%S", replace_tz=None):
         """String -> Date"""
-        return datetime.strptime(date_string, format)
+        return datetime.strptime(date_string, format).replace(tzinfo=replace_tz)
 
     @staticmethod
     def convert_timestamp_to_string(timestamp, format="%Y-%m-%d %H:%M:%S"):
@@ -37,15 +37,13 @@ class DateFormatter:
         return DateFormatter.convert_local_date_to_string(DateFormatter.convert_timepstamp_to_local_date(timestamp))
 
     @staticmethod
-    def convert_string_to_timestamp(date_string, format="%Y-%m-%d %H:%M:%S"):
+    def convert_string_to_timestamp(date_string, format="%Y-%m-%d %H:%M:%S", replace_tz=None):
         """String -> Date -> Timestamp(ms)"""
-        return DateFormatter.convert_local_date_to_timestamp(DateFormatter.convert_string_to_local_date(date_string, format))
+        return DateFormatter.convert_local_date_to_timestamp(DateFormatter.convert_string_to_local_date(date_string, format, replace_tz))
 
     @staticmethod
-    def convert_date_to_iso8601(date, utc=False):
+    def convert_date_to_iso8601(date):
         """Date -> ISO8601"""
-        if utc:
-            date = date.astimezone(pytz.UTC)
         return date.isoformat()
 
     @staticmethod
@@ -84,9 +82,10 @@ class CandleFormatter:
         df = pd.DataFrame(data, dtype=float)
         df.rename(columns={0: 'MTS', 1: COL_OPEN, 2: COL_HIGH, 3: COL_LOW, 4: COL_CLOSE, 5: COL_VOLUME}, inplace=True)
         if from_type == CandleDateFromType.ISO8601:
-            df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=None))
+            df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=pytz.utc))
         else:
             df[date_name] = pd.to_datetime(df['MTS'], unit='ms')
+            df[date_name] = df[date_name].dt.tz_localize('UTC')
         df = df[[date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
         return df
 
