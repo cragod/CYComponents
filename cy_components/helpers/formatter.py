@@ -18,7 +18,7 @@ class DateFormatter:
     @staticmethod
     def convert_timepstamp_to_local_date(timestamp, tz=None):
         """Timestamp(ms) -> Date, tz=None 默认走本地时区"""
-        date = datetime.fromtimestamp(timestamp / 1000, tz=tz)
+        date = datetime.fromtimestamp(timestamp / 1000, tz=tz).astimezone(tz)
         return date
 
     @staticmethod
@@ -84,8 +84,7 @@ class CandleFormatter:
         if from_type == CandleDateFromType.ISO8601:
             df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=pytz.utc))
         else:
-            df[date_name] = pd.to_datetime(df['MTS'], unit='ms')
-            df[date_name] = df[date_name].dt.tz_localize('UTC')
+            df[date_name] = pd.to_datetime(df['MTS'], unit='ms', utc=pytz.utc)
         df = df[[date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
         return df
 
