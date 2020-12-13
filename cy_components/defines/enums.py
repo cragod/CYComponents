@@ -38,6 +38,14 @@ class TimeFrame(Enum):
         """ 所有枚举项的实际值数组 """
         return [e.value for e in cls]
 
+    @property
+    def rule_type(self):
+        if self in [TimeFrame.Minute_1, TimeFrame.Minute_3, TimeFrame.Minute_5, TimeFrame.Minute_15, TimeFrame.Minute_30]:
+            value = self.value.replace("m", "T")
+        else:
+            value = self.value.upper()
+        return RuleType(value)
+
     def time_interval(self, res_unit='ms'):
         """转为时间戳长度
 
