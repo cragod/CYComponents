@@ -13,6 +13,9 @@ class RuleType(Enum):
     Minute_15 = '15T'
     Minute_30 = '30T'
 
+    Hour_1 = '1H'
+    Hour_2 = '2H'
+
 
 class TimeFrame(Enum):
     """ CCXT 请求用的 K 线时间规则"""
