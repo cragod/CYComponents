@@ -34,7 +34,7 @@ class DateFormatter:
     @staticmethod
     def convert_timestamp_to_string(timestamp, format="%Y-%m-%d %H:%M:%S"):
         """Timestamp(ms) -> Date -> String"""
-        return DateFormatter.convert_local_date_to_string(DateFormatter.convert_timepstamp_to_local_date(timestamp))
+        return DateFormatter.convert_local_date_to_string(DateFormatter.convert_timepstamp_to_local_date(timestamp), format)
 
     @staticmethod
     def convert_string_to_timestamp(date_string, format="%Y-%m-%d %H:%M:%S", replace_tz=None):
