@@ -126,21 +126,35 @@ class TimeFrame(Enum):
             raise ValueError('time_interval doesn\'t end with m')
 
 
-class ErrorEnum(Enum):
-    """错误处理"""
+class CrawlerType(Enum):
+    """K线抓取的类型"""
 
-    # Global
-    DATABASE_AUTH_FAILED = 100001  # auth database failed
-    DATABASE_QUERY_FAILED = 100002  # query exec failed
+    BNC_DELIVERY = "binance_delivery"
+    OK_CONTRACT = "ok_contract"
 
-    # Sp
-    REQUEST_PARAM_INVALID = 200001  # param invalid
-
-    def description_dict(self, desc=''):
-        """格式化输出错误字典"""
-        desc_dict = {'code': self.value}
-        if self.value == ErrorEnum.DATABASE_AUTH_FAILED.value:
-            desc_dict['message'] = 'Database authorization denied'
+    @property
+    def separator(self):
+        if self == CrawlerType.BNC_DELIVERY:
+            return '_'
+        elif self == CrawlerType.OK_CONTRACT:
+            return '-'
         else:
-            desc_dict['message'] = desc
-        return desc_dict
+            return '/'
+
+    @property
+    def sample(self):
+        if self == CrawlerType.BNC_DELIVERY:
+            return 'BTCUSD_201225'
+        elif self == CrawlerType.OK_CONTRACT:
+            return 'BTC-USD-201225'
+        else:
+            return ''
+
+    @property
+    def exchange_name(self):
+        if self == CrawlerType.BNC_DELIVERY:
+            return 'binance'
+        elif self == CrawlerType.OK_CONTRACT:
+            return 'okex'
+        else:
+            return ''
