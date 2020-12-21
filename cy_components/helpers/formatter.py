@@ -80,12 +80,13 @@ class CandleFormatter:
         ...
         """
         df = pd.DataFrame(data, dtype=float)
-        df.rename(columns={0: 'MTS', 1: COL_OPEN, 2: COL_HIGH, 3: COL_LOW, 4: COL_CLOSE, 5: COL_VOLUME}, inplace=True)
-        if from_type == CandleDateFromType.ISO8601:
-            df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=pytz.utc))
-        else:
-            df[date_name] = pd.to_datetime(df['MTS'], unit='ms', utc=pytz.utc)
-        df = df[[date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
+        if df.shape[0] > 0:
+            df.rename(columns={0: 'MTS', 1: COL_OPEN, 2: COL_HIGH, 3: COL_LOW, 4: COL_CLOSE, 5: COL_VOLUME}, inplace=True)
+            if from_type == CandleDateFromType.ISO8601:
+                df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=pytz.utc))
+            else:
+                df[date_name] = pd.to_datetime(df['MTS'], unit='ms', utc=pytz.utc)
+            df = df[[date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
         return df
 
     @staticmethod
