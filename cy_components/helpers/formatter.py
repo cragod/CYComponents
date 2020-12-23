@@ -16,7 +16,7 @@ class DateFormatter:
         return int(date.timestamp()) * 1000
 
     @staticmethod
-    def convert_timepstamp_to_local_date(timestamp, tz=None):
+    def convert_timestamp_to_local_date(timestamp, tz=None):
         """Timestamp(ms) -> Date, tz=None 默认走本地时区"""
         date = datetime.fromtimestamp(timestamp / 1000, tz=tz).astimezone(tz)
         return date
@@ -34,7 +34,7 @@ class DateFormatter:
     @staticmethod
     def convert_timestamp_to_string(timestamp, format="%Y-%m-%d %H:%M:%S"):
         """Timestamp(ms) -> Date -> String"""
-        return DateFormatter.convert_local_date_to_string(DateFormatter.convert_timepstamp_to_local_date(timestamp), format)
+        return DateFormatter.convert_local_date_to_string(DateFormatter.convert_timestamp_to_local_date(timestamp), format)
 
     @staticmethod
     def convert_string_to_timestamp(date_string, format="%Y-%m-%d %H:%M:%S", replace_tz=None):
@@ -94,10 +94,10 @@ class CandleFormatter:
         """Convert timestamp to Date"""
         for doc in json_list:
             if not isinstance(column_name, list):
-                doc[column_name] = DateFormatter.convert_timepstamp_to_local_date(doc[column_name], tz)
+                doc[column_name] = DateFormatter.convert_timestamp_to_local_date(doc[column_name], tz)
             else:
                 for c in column_name:
-                    doc[c] = DateFormatter.convert_timepstamp_to_local_date(doc[c], tz)
+                    doc[c] = DateFormatter.convert_timestamp_to_local_date(doc[c], tz)
         return json_list
 
     @staticmethod
