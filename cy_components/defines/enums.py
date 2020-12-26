@@ -15,6 +15,7 @@ class RuleType(Enum):
 
     Hour_1 = '1H'
     Hour_2 = '2H'
+    Hour_4 = '4H'
 
 
 class TimeFrame(Enum):
