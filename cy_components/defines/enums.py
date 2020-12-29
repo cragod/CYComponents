@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pandas as pd
 from enum import Enum
 from datetime import datetime, timedelta
 
@@ -83,7 +84,7 @@ class TimeFrame(Enum):
         ts = timestamp - count * self.time_interval(unit)
         return ts
 
-    def next_date_time_point(self, ahead_time=1, debug=False):
+    def next_date_time_point(self, ahead_seconds=5, debug=False):
         """计算下一个实际时间点
 
         Parameters
@@ -99,32 +100,22 @@ class TimeFrame(Enum):
             目前只支持 'm' 结尾的 Time Interval
         """
 
-        if self.value.endswith('m'):
-            time_interval = int(self.value.strip('m'))
-            now_time = datetime.now()
-            if debug:
-                print(now_time)
-                return now_time + timedelta(seconds=10)
-            target_min = (int(now_time.minute / time_interval) + 1) * time_interval
-            # 没到下一个小时
-            if target_min < 60:
-                target_time = now_time.replace(minute=target_min, second=0, microsecond=0)
-            else:
-                # 到第二天
-                if now_time.hour == 23:
-                    target_time = now_time.replace(hour=0, minute=0, second=0, microsecond=0)
-                    target_time += timedelta(days=1)
-                else:
-                    # 下一个小时
-                    target_time = now_time.replace(hour=now_time.hour + 1, minute=0, second=0, microsecond=0)
+        ti = pd.to_timedelta(self.value)
+        now_time = datetime.now()
+        # now_time = datetime(2019, 5, 9, 23, 50, 30)  # 修改now_time，可用于测试
+        this_midnight = now_time.replace(hour=0, minute=0, second=0, microsecond=0)
+        min_step = timedelta(minutes=1)
 
-            # 离目标时间太近，再加一个周期
-            if (target_time - datetime.now()).seconds < ahead_time + 1:
-                target_time += timedelta(minutes=time_interval)
-            return target_time
-        else:
-            # 暂时没支持其他单位
-            raise ValueError('time_interval doesn\'t end with m')
+        target_time = now_time.replace(second=0, microsecond=0)
+
+        while True:
+            target_time = target_time + min_step
+            delta = target_time - this_midnight
+            if delta.seconds % ti.seconds == 0 and (target_time - now_time).seconds >= ahead_seconds:
+                # 当符合运行周期，并且目标时间有足够大的余地，默认为60s
+                break
+
+        return target_time
 
 
 class CrawlerType(Enum):
