@@ -68,7 +68,10 @@ class CandleFormatter:
     """K 线格式处理"""
 
     @staticmethod
-    def convert_raw_data_to_data_frame(data, date_name=COL_CANDLE_BEGIN_TIME, from_type=CandleDateFromType.Timestamps):
+    def convert_raw_data_to_data_frame(data,
+                                       date_name=COL_CANDLE_BEGIN_TIME,
+                                       from_type=CandleDateFromType.Timestamps,
+                                       extra_columns_mapping={}):
         """
         Raw Data:
         [[1503386100000, 300.23, 300.24, 294.38, 297.76, 125.53231],
@@ -81,15 +84,21 @@ class CandleFormatter:
         """
         df = pd.DataFrame(data, dtype=float)
         if df.shape[0] > 0:
-            df.rename(columns={0: 'MTS', 1: COL_OPEN, 2: COL_HIGH, 3: COL_LOW, 4: COL_CLOSE, 5: COL_VOLUME}, inplace=True)
+            column_mapping = {0: 'MTS', 1: COL_OPEN, 2: COL_HIGH, 3: COL_LOW, 4: COL_CLOSE, 5: COL_VOLUME}
+            column_mapping.update(extra_columns_mapping)
+            df.rename(columns=column_mapping,
+                      inplace=True)
             if from_type == CandleDateFromType.ISO8601:
                 df[date_name] = df['MTS'].apply(lambda x: dateutil.parser.parse(x).replace(tzinfo=pytz.utc))
             else:
                 df[date_name] = pd.to_datetime(df['MTS'], unit='ms', utc=pytz.utc)
-            df = df[[date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
+            columns = [date_name, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]
+            for extra_key in sorted(extra_columns_mapping.keys()):
+                columns.append(extra_columns_mapping[extra_key])
+            df = df[columns]
         return df
 
-    @staticmethod
+    @ staticmethod
     def convert_json_timestamp_to_date(json_list, column_name=COL_CANDLE_BEGIN_TIME, tz=None):
         """Convert timestamp to Date"""
         for doc in json_list:
@@ -100,7 +109,7 @@ class CandleFormatter:
                     doc[c] = DateFormatter.convert_timestamp_to_local_date(doc[c], tz)
         return json_list
 
-    @staticmethod
+    @ staticmethod
     def resample(df, rule_type=RuleType.Minute_15):
         """
         Resample date
