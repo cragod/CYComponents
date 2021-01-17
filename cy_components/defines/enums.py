@@ -29,6 +29,7 @@ class TimeFrame(Enum):
     Minute_30 = '30m'
     Hour_1 = '1h'
     Hour_2 = '2h'
+    Hour_3 = '3h'
     Hour_4 = '4h'
     Hour_6 = '6h'
     Hour_8 = '8h'
@@ -121,6 +122,7 @@ class TimeFrame(Enum):
 class CrawlerType(Enum):
     """K线抓取的类型"""
 
+    BNC_FUTURE = "binance_future"
     BNC_DELIVERY = "binance_delivery"
     OK_CONTRACT = "ok_contract"
 
@@ -140,11 +142,11 @@ class CrawlerType(Enum):
         elif self == CrawlerType.OK_CONTRACT:
             return 'BTC-USD-201225'
         else:
-            return ''
+            return 'BTC/USDT'
 
     @property
     def exchange_name(self):
-        if self == CrawlerType.BNC_DELIVERY:
+        if self in [CrawlerType.BNC_DELIVERY, CrawlerType.BNC_FUTURE]:
             return 'binance'
         elif self == CrawlerType.OK_CONTRACT:
             return 'okex'
