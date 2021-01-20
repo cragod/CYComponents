@@ -119,16 +119,26 @@ class CandleFormatter:
         """
 
         # =====转换为其他分钟数据
-        period_df = df.resample(rule=rule_type.value, on=COL_CANDLE_BEGIN_TIME, label='left', closed='left').agg(
-            {COL_OPEN: 'first',
-             COL_HIGH: 'max',
-             COL_LOW: 'min',
-             COL_CLOSE: 'last',
-             COL_VOLUME: 'sum',
-             })
+        agg_dict = {
+            COL_OPEN: 'first',
+            COL_HIGH: 'max',
+            COL_LOW: 'min',
+            COL_CLOSE: 'last',
+            COL_VOLUME: 'sum',
+        }
+        columns = list(df.columns)
+        if 'quote_volume' in columns:
+            agg_dict['quote_volume'] = 'sum'
+        if 'trade_num' in columns:
+            agg_dict['trade_num'] = 'sum'
+        if 'taker_buy_base_asset_volume' in columns:
+            agg_dict['taker_buy_base_asset_volume'] = 'sum'
+        if 'taker_buy_quote_asset_volume' in columns:
+            agg_dict['taker_buy_quote_asset_volume'] = 'sum'
+        period_df = df.resample(rule=rule_type.value, on=COL_CANDLE_BEGIN_TIME, label='left', closed='left').agg(agg_dict)
         period_df.dropna(subset=[COL_OPEN], inplace=True)  # 去除一天都没有交易的周期
         period_df = period_df[period_df[COL_VOLUME] > 0]  # 去除成交量为0的交易周期
         period_df.reset_index(inplace=True)
-        df = period_df[[COL_CANDLE_BEGIN_TIME, COL_OPEN, COL_HIGH, COL_LOW, COL_CLOSE, COL_VOLUME]]
+        df = period_df[columns]
 
         return df
