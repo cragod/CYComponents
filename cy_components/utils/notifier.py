@@ -8,6 +8,7 @@ from enum import IntEnum
 class MessageType(IntEnum):
     DingDing = 0
     WeChatWork = 1
+    Telegram = 2
 
 
 class MessageHandler:
@@ -52,9 +53,22 @@ class MessageHandler:
             logger.error('Send Dingding message failed: %s', format(repr(err)))
 
     @staticmethod
+    def __sending_telegram_msg(msg, token):
+        try:
+            bot_token = token.split(';;;')[0]
+            bot_chatID = token.split(';;;')[1]
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + msg
+
+            requests.get(send_text)
+        except Exception as err:
+            print('Send Telegram message failed: %s', format(repr(err)))
+
+    @staticmethod
     def send_message(msg, title='Message', type=MessageType.DingDing, token=None):
         """Send simple message"""
         if type == MessageType.DingDing:
             MessageHandler.__send_dingding_msg(title, msg, token)
         elif type == MessageType.WeChatWork:
             MessageHandler.__send_wechatwork_msg(msg, token)
+        elif type == MessageType.Telegram:
+            MessageHandler.__sending_telegram_msg(msg, token)
