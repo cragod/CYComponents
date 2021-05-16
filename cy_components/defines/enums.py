@@ -123,6 +123,7 @@ class CrawlerType(Enum):
     """K线抓取的类型"""
 
     BNC_FUTURE = "binance_future"
+    BNC_FUTURE_CTA = 'binance_future_cta'
     BNC_DELIVERY = "binance_delivery"
     OK_CONTRACT = "ok_contract"
 
@@ -141,12 +142,14 @@ class CrawlerType(Enum):
             return 'BTCUSD_201225'
         elif self == CrawlerType.OK_CONTRACT:
             return 'BTC-USD-201225'
+        elif self == CrawlerType.BNC_FUTURE_CTA:
+            return 'BTCUSDT'
         else:
             return 'BTC/USDT'
 
     @property
     def exchange_name(self):
-        if self in [CrawlerType.BNC_DELIVERY, CrawlerType.BNC_FUTURE]:
+        if self in [CrawlerType.BNC_DELIVERY, CrawlerType.BNC_FUTURE, CrawlerType.BNC_FUTURE_CTA]:
             return 'binance'
         elif self == CrawlerType.OK_CONTRACT:
             return 'okex'
