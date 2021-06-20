@@ -57,9 +57,13 @@ class MessageHandler:
         try:
             bot_token = token.split(';;;')[0]
             bot_chatID = token.split(';;;')[1]
-            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + msg
-
-            requests.get(send_text)
+            url = 'https://api.telegram.org/bot' + bot_token + '/sendMessage'
+            body = {
+                'parse_mode': 'Markdown',
+                'chat_id': bot_chatID,
+                'text': msg
+            }
+            print(requests.post(url, data=body).text)
         except Exception as err:
             print('Send Telegram message failed: %s', format(repr(err)))
 
