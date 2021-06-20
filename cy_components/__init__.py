@@ -7,4 +7,4 @@ except ImportError:
 
 __author__ = """Gatro CY"""
 __email__ = 'cragodn@gmail.com'
-__version__ = '0.3.11'
+__version__ = '0.3.12'
