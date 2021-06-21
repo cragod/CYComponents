@@ -57,6 +57,7 @@ class MessageHandler:
         try:
             bot_token = token.split(';;;')[0]
             bot_chatID = token.split(';;;')[1]
+            msg = msg.replace('**', '*')
             url = 'https://api.telegram.org/bot' + bot_token + '/sendMessage'
             body = {
                 'parse_mode': 'Markdown',
