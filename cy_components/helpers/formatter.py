@@ -18,7 +18,7 @@ class DateFormatter:
     @staticmethod
     def convert_timestamp_to_local_date(timestamp, tz=None):
         """Timestamp(ms) -> Date, tz=None 默认走本地时区"""
-        date = datetime.fromtimestamp(timestamp / 1000, tz=tz).astimezone(tz)
+        date = datetime.fromtimestamp(int(timestamp) / 1000, tz=tz).astimezone(tz)
         return date
 
     @staticmethod
