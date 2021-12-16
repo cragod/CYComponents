@@ -46,6 +46,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/cragod/CYComponents',
-    version='0.3.16',
+    version='0.3.17',
     zip_safe=False,
 )
