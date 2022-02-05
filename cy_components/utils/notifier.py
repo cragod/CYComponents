@@ -9,6 +9,7 @@ class MessageType(IntEnum):
     DingDing = 0
     WeChatWork = 1
     Telegram = 2
+    ServerJiang = 3
 
 
 class MessageHandler:
@@ -69,6 +70,19 @@ class MessageHandler:
             print('Send Telegram message failed: %s', format(repr(err)))
 
     @staticmethod
+    def __sending_server_jiang_msg(title, message, token):
+        try:
+            api = "https://sctapi.ftqq.com/{}.send".format(token)
+            data = {
+                'text': title,
+                'desp': message
+            }
+            result = requests.post(api, data=data)
+            return(result)
+        except Exception as err:
+            print('Send ServerJiang message failed: %s', format(repr(err)))
+
+    @ staticmethod
     def send_message(msg, title='Message', type=MessageType.DingDing, token=None):
         """Send simple message"""
         if type == MessageType.DingDing:
@@ -77,3 +91,5 @@ class MessageHandler:
             MessageHandler.__send_wechatwork_msg(msg, token)
         elif type == MessageType.Telegram:
             MessageHandler.__sending_telegram_msg(msg, token)
+        elif type == MessageType.ServerJiang:
+            MessageHandler.__sending_server_jiang_msg(title, msg, token)
